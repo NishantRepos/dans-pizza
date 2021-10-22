@@ -6,13 +6,10 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -21,7 +18,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -122,21 +118,7 @@ public class ApplicationConfig implements WebMvcConfigurer {
 		return txManager;
 	}
 	
-	// ResourceBundleMessageSource Bean for showing error messages
-	@Bean
-	public ResourceBundleMessageSource errorMessageSource() {
-		
-		ResourceBundleMessageSource errorMessageSource = 
-				new ResourceBundleMessageSource();
-		
-		errorMessageSource.setBasename("classpath:messages");
-		errorMessageSource.setUseCodeAsDefaultMessage(true);
-		errorMessageSource.setDefaultEncoding("UTF-8");
-		
-		return errorMessageSource;
-		
-	}
-	
+	// add resources location for css, js, images, etc.
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		

@@ -2,11 +2,8 @@ package com.danspizza.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,9 +19,11 @@ import com.danspizza.service.PizzaService;
 @RequestMapping("report")
 public class ReportController {
 
+	// Injecting PizzaService Bean
 	@Autowired
 	private PizzaService pizzaService;
 	
+	// GET Request - loads OrderReport view with empty BillRangeBean object
 	@GetMapping("/load")
 	public ModelAndView loadDateRangeReportPage(ModelAndView mv) {
 		
@@ -38,14 +37,12 @@ public class ReportController {
 		return mv;
 	}
 	
+	// POST Request - gets the details of orders within the specified bill range
 	@PostMapping("/getdetails")
 	public ModelAndView getOrderDetails(@ModelAttribute("billRangeBean") BillRangeBean billRangeBean) throws Exception {
 		
-		System.out.println("In getOrderDetails(): " + billRangeBean);
-		
 		List<PizzaOrderBean> listPizzaOrderBean =
 			 pizzaService.getOrderDetails(billRangeBean.getFromPrice(), billRangeBean.getToPrice());
-		//System.out.println("In getOrderDetails(): " + listPizzaOrderBean);
 		
 		if (listPizzaOrderBean.isEmpty()) {
 			throw new Exception("No records were found for the entered Bill Range");
@@ -59,6 +56,7 @@ public class ReportController {
 		
 	}
 	
+	// Common exception handler for this controller
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleAllExceptions(Exception exception) {
 

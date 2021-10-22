@@ -20,7 +20,6 @@ public class PizzaOrderBean {
 	
 	@NotNull(message = "Contact number should have length 10")
 	@Size(min=10, max=10, message="Contact Number should have length 10")
-	//@Pattern(regexp = "^[0-9]{10}$", message = "Contact Number should have length 10")
 	private String contactNumber;
 	
 	private Double bill;

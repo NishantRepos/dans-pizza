@@ -22,29 +22,19 @@ public class PizzaServiceImpl implements PizzaService {
 	@Transactional
 	public List<PizzaOrderBean> getOrderDetails(Double fromBill, Double toBill) {
 
-		System.out.println("In Service layer getOrderDetails(): fromBill = "
-							+ fromBill + " toBill = " + toBill );
 		return pizzaDAOWrapper.getOrderDetails(fromBill, toBill);
-		
+
 	}
 
 	@Override
 	@Transactional
 	public PizzaOrderBean addPizzaOrderDetails(PizzaOrderBean pizzaOrderBean) {
 		
-		//System.out.println("In Service Layer addPizzaOrderDetails(): " + pizzaOrderBean);
-		
 		Double price = pizzaDAOWrapper.getPizzaPrice(pizzaOrderBean.getPizzaId());
-		
-		System.out.println("Pizza Price: " + price);
 		
 		Double bill = price * pizzaOrderBean.getNumberOfPiecesOrdered();
 		
-		System.out.println("Pizza Bill: " + bill);
-		
 		pizzaOrderBean.setBill(bill);
-		
-		System.out.println("Now PizzaOrderBean: " + pizzaOrderBean);
 		
 		return pizzaDAOWrapper.addPizzaOrderDetails(pizzaOrderBean);
 	}

@@ -11,6 +11,7 @@ import com.danspizza.entity.PizzaEntity;
 @Repository
 public interface PizzaDAO extends JpaRepository<PizzaEntity, Integer> {
 
+	// Custom query method to get all pizza details
 	@Query(name = "PizzaEntity.findAllPizzaDetails")
 	public List<PizzaEntity> findAllPizzaDetails();
 	

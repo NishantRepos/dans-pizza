@@ -18,15 +18,20 @@ import com.danspizza.entity.PizzaOrderEntity;
 @Repository
 public class PizzaDAOWrapper {
 
+	// Injecting PizzaDAO bean
 	@Autowired
 	private PizzaDAO pizzaDAO;
 
+	// Injecting PizzaOrderDAO bean
 	@Autowired
 	private PizzaOrderDAO pizzaOrderDAO;
 
+	// Injecting EntityManager bean
 	@Autowired
 	private EntityManager entityManager;
 
+	// Get all pizza details in PizzaEntity object
+	// and copy that in PizzaBean DTO using BeanUtils and return
 	public List<PizzaBean> findAllPizzaDetails() {
 
 		List<PizzaBean> listPizzaBean = new ArrayList<>();
@@ -45,16 +50,15 @@ public class PizzaDAOWrapper {
 		return listPizzaBean;
 	}
 
+	// Copy PizzaOrderBean DTO in PizzaEntity object
+	// then saves the PizzaEntity object and
+	// now copy the returned PizzaEntity object in PizzaOrderBean DTO and return
 	public PizzaOrderBean addPizzaOrderDetails(PizzaOrderBean pizzaOrderBean) {
 
-		System.out.println("\nIn DAO Layer PizzaDAOWrapper Class: " + pizzaOrderBean);
-		
 		PizzaOrderEntity pizzaOrderEntity = new PizzaOrderEntity();
 
 		BeanUtils.copyProperties(pizzaOrderBean, pizzaOrderEntity);
 		
-		System.out.println("PizzaOrderEntity: " + pizzaOrderEntity);
-
 		PizzaOrderEntity thePizzaOrderEntity = pizzaOrderDAO.save(pizzaOrderEntity);
 		
 		BeanUtils.copyProperties(thePizzaOrderEntity, pizzaOrderBean);
@@ -63,6 +67,7 @@ public class PizzaDAOWrapper {
 
 	}
 
+	// Get the pizza price based on pizza id
 	public Double getPizzaPrice(Integer pizzaId) {
 
 		PizzaEntity pizzaEntity = entityManager.find(PizzaEntity.class, pizzaId);
@@ -70,6 +75,7 @@ public class PizzaDAOWrapper {
 		return pizzaEntity.getPrice();
 	}
 
+	// Get the order details within the specified bill range
 	public List<PizzaOrderBean> getOrderDetails(Double fromBill, Double toBill) {
 
 		List<PizzaOrderBean> listPizzaOrderBean = new ArrayList<>();

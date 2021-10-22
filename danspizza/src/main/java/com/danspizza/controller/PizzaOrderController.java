@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -25,9 +24,7 @@ import com.danspizza.service.PizzaService;
 @RequestMapping("order")
 public class PizzaOrderController {
 	
-	@Autowired
-	private MessageSource errorMessageSource;
-	
+	// Injecting PizzaService Bean
 	@Autowired
 	private PizzaService pizzaService;
 
@@ -40,40 +37,33 @@ public class PizzaOrderController {
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
 
+	// GET Request - loads PizzaOrder view with empty PizzaOrderBean object
 	@GetMapping("/load")
 	public ModelAndView loadPizza(ModelAndView modelAndView) {
 
 		PizzaOrderBean pizzaOrderBean = new PizzaOrderBean();
 		modelAndView.addObject("pizzaOrderBean", pizzaOrderBean);
 		modelAndView.setViewName("PizzaOrder");
-		//System.out.println("\nIn Controller Method loadPizza(): " + pizzaOrderBean);
 		return modelAndView;
 	}
 
+	// POST Request - saves the valid customer
 	@PostMapping("/saveCustomer")
 	public ModelAndView saveCustomer(@ModelAttribute("pizzaOrderBean") @Valid PizzaOrderBean pizzaOrderBean,
 			BindingResult theBindingResult, ModelAndView modelAndView) {
 
-		//System.out.println("BindingResult: " + theBindingResult);
-		//System.out.println("PizzaOrderBean: Customer Name = |" + pizzaOrderBean.getCustomerName() + "|");
-
 		// check whether any form validation failed or not.
-		// if failed, populate ModelAndView object with PizzaOrder logical view name
-		// to display the validation error message
-
 		if (theBindingResult.hasErrors()) {
-			//System.out.println("In saveCustomer checking binding result: " + theBindingResult);
+			
 			modelAndView.setViewName("PizzaOrder");
 			modelAndView.addObject("pizzaOrderBean", pizzaOrderBean);
 
 		} else {
 
 			// On successful form validation
-			//System.out.println("\nIn Controller method saveCustomer(): " + pizzaOrderBean);
 			PizzaOrderBean thePizzaOrderBean = pizzaService.addPizzaOrderDetails(pizzaOrderBean);
 
 			modelAndView.addObject("pizzaOrderBean", thePizzaOrderBean);
-			//System.out.println("orderID: " + thePizzaOrderBean.getOrderId());
 			modelAndView.setViewName("PizzaOrderSuccess");
 
 		}
@@ -81,6 +71,7 @@ public class PizzaOrderController {
 		return modelAndView;
 	}
 
+	// get all pizza names
 	@ModelAttribute("pizzaName")
 	public Map<Integer, String> populatePizzaNames() {
 		
@@ -91,6 +82,7 @@ public class PizzaOrderController {
 		return pizzaName;
 	}
 
+	// common exception handler for this controller
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleAllExceptions(Exception exception) {
 
